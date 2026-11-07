@@ -1354,12 +1354,10 @@ img {
   }
 }
 
-
 /* =========================================
    LAYOUT CORRECTIONS — HOME AND ABOUT
 ========================================= */
 
-/* Allow pages to scroll from their actual top */
 .pages-container {
   overflow: hidden;
 }
@@ -1371,8 +1369,6 @@ img {
   scroll-behavior: smooth;
 }
 
-/* HOME: prevent the heading from being pushed
-   above the visible screen */
 .home-page {
   display: block;
   padding-top: clamp(30px, 5vh, 65px);
@@ -1387,7 +1383,6 @@ img {
   margin-bottom: 50px;
 }
 
-/* Keep the full heading visible */
 .hero-copy {
   min-width: 0;
 }
@@ -1398,7 +1393,6 @@ img {
   overflow-wrap: normal;
 }
 
-/* Give the portrait area enough room */
 .portrait-area {
   min-width: 0;
 }
@@ -1407,8 +1401,6 @@ img {
   height: clamp(300px, 43vh, 430px);
 }
 
-/* ABOUT: start content from the top instead
-   of vertically centring an oversized layout */
 .about-page {
   display: block;
   padding-top: clamp(35px, 5vh, 60px);
@@ -1437,7 +1429,6 @@ img {
   align-self: center;
 }
 
-/* Keep footer controls from covering content */
 .home-bottom,
 .page-footer,
 .bottom-navigation {
@@ -1445,7 +1436,7 @@ img {
 }
 
 /* =========================================
-   TABLET
+   TABLET CORRECTIONS
 ========================================= */
 
 @media (max-width: 1000px) {
@@ -1466,7 +1457,7 @@ img {
 }
 
 /* =========================================
-   MOBILE
+   MOBILE CORRECTIONS
 ========================================= */
 
 @media (max-width: 700px) {
@@ -1520,7 +1511,10 @@ img {
   }
 }
 
-/* Short desktop screens */
+/* =========================================
+   SHORT DESKTOP SCREENS
+========================================= */
+
 @media (max-height: 750px) and (min-width: 701px) {
   .home-page,
   .about-page {
@@ -1549,7 +1543,6 @@ img {
 ========================================= */
 
 @media (min-width: 1001px) {
-
   .home-page,
   .about-page {
     padding-left: clamp(55px, 8vw, 150px);
@@ -1561,11 +1554,9 @@ img {
     max-width: 1450px;
     margin-left: auto;
     margin-right: auto;
-
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
     gap: clamp(55px, 8vw, 140px);
-
     align-items: center;
   }
 
@@ -1598,13 +1589,11 @@ img {
     height: clamp(380px, 55vh, 520px);
   }
 
-  /* About page uses more of the screen */
   .about-layout {
     width: 100%;
     max-width: 1450px;
     margin-left: auto;
     margin-right: auto;
-
     display: grid;
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     gap: clamp(65px, 9vw, 150px);
@@ -1667,5 +1656,133 @@ img {
     width: 100%;
     max-width: 310px;
     margin: 0 auto;
+  }
+}
+
+/* =========================================
+   REFINED PORTRAIT CONTROLS
+========================================= */
+
+.portrait-heading {
+  display: none !important;
+}
+
+.portrait-controls {
+  justify-content: center;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.portrait-controls span {
+  display: none !important;
+}
+
+/* =========================================
+   INTERACTIVE GREETING JOURNEY
+========================================= */
+
+.greeting-journey {
+  width: 100%;
+  max-width: 570px;
+  min-height: 205px;
+  margin: 0 auto 30px;
+  padding: 27px 25px 25px;
+  border: 1px solid var(--border);
+  background: linear-gradient(
+    135deg,
+    rgba(203, 166, 91, 0.075),
+    rgba(203, 166, 91, 0.018)
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: border-color 0.35s ease, background 0.35s ease;
+}
+
+.greeting-progress {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 19px;
+}
+
+.greeting-progress span {
+  width: 25px;
+  height: 3px;
+  border-radius: 5px;
+  background: rgba(203, 166, 91, 0.22);
+  transition: background 0.3s ease, width 0.3s ease;
+}
+
+.greeting-progress span.complete {
+  width: 38px;
+  background: var(--gold-light);
+}
+
+.greeting-message {
+  color: var(--gold-light);
+  font-size: clamp(23px, 3vw, 31px);
+  line-height: 1.35;
+  margin-bottom: 8px;
+  animation: greetingReveal 0.45s ease both;
+}
+
+.greeting-subtext {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 19px;
+}
+
+.greeting-continue {
+  min-height: 43px;
+  padding: 0 19px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--cream);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.greeting-continue:hover {
+  background: var(--gold);
+  color: var(--black);
+  transform: translateY(-2px);
+}
+
+.greeting-continue span {
+  font-size: 17px;
+}
+
+@keyframes greetingReveal {
+  from {
+    opacity: 0;
+    transform: translateY(9px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 700px) {
+  .greeting-journey {
+    min-height: 190px;
+    padding: 22px 16px;
+  }
+
+  .greeting-subtext {
+    font-size: 12px;
   }
 }

@@ -25,7 +25,7 @@ function App() {
   const [activePage, setActivePage] = useState(0)
   const [activePortrait, setActivePortrait] = useState(0)
   const [count, setCount] = useState(0)
-  const [greeting, setGreeting] = useState('Hello there!')
+  const [greetingStep, setGreetingStep] = useState(0)
   const [visitorName, setVisitorName] = useState('')
   const [submittedName, setSubmittedName] = useState('')
   const [isAnimating, setIsAnimating] = useState(false)
@@ -35,13 +35,11 @@ function App() {
   const animationTimer = useRef(null)
   const wheelLocked = useRef(false)
 
-  // Navigate between pages
   const goToPage = (index) => {
     if (index < 0 || index >= pages.length) return
     setActivePage(index)
   }
 
-  // Play camera shutter sound
   const playShutter = () => {
     if (!audioRef.current) return
 
@@ -49,7 +47,6 @@ function App() {
     audioRef.current.play().catch(() => {})
   }
 
-  // Animate portrait changes
   const triggerPortraitAnimation = () => {
     setIsAnimating(true)
 
@@ -62,7 +59,6 @@ function App() {
     }, 650)
   }
 
-  // Change portraits
   const changePortrait = (direction = 1) => {
     setActivePortrait((current) =>
       (current + direction + portraits.length) % portraits.length
@@ -72,7 +68,6 @@ function App() {
     playShutter()
   }
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'ArrowRight') {
@@ -95,7 +90,6 @@ function App() {
     }
   }, [])
 
-  // Spark custom cursor
   useEffect(() => {
     const cursor = document.querySelector('.spark-cursor')
 
@@ -113,7 +107,6 @@ function App() {
     }
   }, [])
 
-  // Clean up animation timer
   useEffect(() => {
     return () => {
       if (animationTimer.current) {
@@ -122,12 +115,10 @@ function App() {
     }
   }, [])
 
-  // Mouse wheel page navigation
   const handlePageWheel = (event) => {
     if (Math.abs(event.deltaY) < 35) return
     if (wheelLocked.current) return
 
-    // Allow normal vertical scrolling inside a page
     const page = event.target.closest('.page')
 
     if (page && page.scrollHeight > page.clientHeight + 5) {
@@ -160,7 +151,6 @@ function App() {
     }, 900)
   }
 
-  // Touch navigation
   const handleTouchStart = (event) => {
     touchStart.current = {
       x: event.touches[0].clientX,
@@ -175,7 +165,6 @@ function App() {
     const differenceY =
       touchStart.current.y - event.changedTouches[0].clientY
 
-    // Only navigate pages when the gesture is horizontal
     if (Math.abs(differenceX) < 60) return
     if (Math.abs(differenceX) < Math.abs(differenceY)) return
 
@@ -190,12 +179,10 @@ function App() {
     }
   }
 
-  // Greeting buttons
-  const handleGreeting = (message) => {
-    setGreeting(message)
+  const advanceGreeting = () => {
+    setGreetingStep((step) => Math.min(step + 1, 3))
   }
 
-  // Personalised visitor greeting
   const handleNameSubmit = (event) => {
     event.preventDefault()
 
@@ -206,7 +193,6 @@ function App() {
     setSubmittedName(cleanName)
   }
 
-  // Counter result: automatically determines even or odd
   const numberType = count % 2 === 0 ? 'Even' : 'Odd'
 
   return (
@@ -216,11 +202,7 @@ function App() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <audio
-        ref={audioRef}
-        src={shutterSound}
-        preload="auto"
-      />
+      <audio ref={audioRef} src={shutterSound} preload="auto" />
 
       {/* NAVIGATION */}
       <header className="navbar">
@@ -289,8 +271,7 @@ function App() {
                     className="gold-button"
                     onClick={() => goToPage(1)}
                   >
-                    Get to know me
-                    <span>↗</span>
+                    Get to know me <span>↗</span>
                   </button>
 
                   <button
@@ -309,11 +290,6 @@ function App() {
 
               {/* INTERACTIVE PORTRAITS */}
               <div className="portrait-area">
-                <div className="portrait-heading">
-                  <span>THE MANY SIDES OF ME</span>
-                  <span>0{activePortrait + 1} / 05</span>
-                </div>
-
                 <div
                   className={`portrait-stack ${
                     isAnimating ? 'changing' : ''
@@ -348,7 +324,10 @@ function App() {
                   })}
                 </div>
 
-                <div className="portrait-controls">
+                <div
+                  className="portrait-controls"
+                  aria-label="Portrait controls"
+                >
                   <button
                     className="portrait-arrow"
                     onClick={() => changePortrait(-1)}
@@ -356,8 +335,6 @@ function App() {
                   >
                     ←
                   </button>
-
-                  <span>CLICK THE PHOTOS TO EXPLORE</span>
 
                   <button
                     className="portrait-arrow"
@@ -373,9 +350,7 @@ function App() {
             <div className="home-bottom">
               <span>SCROLL OR USE THE ARROWS TO NAVIGATE</span>
 
-              <button onClick={() => goToPage(1)}>
-                ↓
-              </button>
+              <button onClick={() => goToPage(1)}>↓</button>
 
               <span>© 2026</span>
             </div>
@@ -430,8 +405,7 @@ function App() {
                   className="gold-button"
                   onClick={() => goToPage(2)}
                 >
-                  There's more
-                  <span>↗</span>
+                  There's more <span>↗</span>
                 </button>
               </div>
             </div>
@@ -462,7 +436,6 @@ function App() {
                 {String(count).padStart(2, '0')}
               </div>
 
-              {/* EVEN / ODD RESULT */}
               <div className={`number-result ${numberType.toLowerCase()}`}>
                 <span className="result-label">NUMBER TYPE</span>
                 <strong>{numberType} Number</strong>
@@ -493,9 +466,7 @@ function App() {
                 </button>
               </div>
 
-              <p className="counter-note">
-                EVERY CLICK COUNTS.
-              </p>
+              <p className="counter-note">EVERY CLICK COUNTS.</p>
             </div>
 
             <div className="page-footer">
@@ -542,8 +513,7 @@ function App() {
                   />
 
                   <button className="gold-button" type="submit">
-                    Say hello
-                    <span>↗</span>
+                    Say hello <span>↗</span>
                   </button>
                 </div>
               </form>
@@ -551,44 +521,71 @@ function App() {
               {submittedName && (
                 <div className="personal-greeting" role="status">
                   <p>Hello, {submittedName}!</p>
-                  <span>It's lovely to have you here. Thanks for visiting!</span>
+                  <span>
+                    It's lovely to have you here. Thanks for visiting!
+                  </span>
                 </div>
               )}
 
-              <div className="greeting-box">
-                <p>{greeting}</p>
-
-                <div className="greeting-buttons">
-                  <button
-                    onClick={() => handleGreeting('Hello there!')}
-                  >
-                    Hello
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      handleGreeting('Nice to meet you!')
-                    }
-                  >
-                    Nice to meet you
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      handleGreeting('Have a lovely day!')
-                    }
-                  >
-                    Have a lovely day
-                  </button>
+              {/* PROGRESSIVE GREETING */}
+              <div
+                className={`greeting-journey step-${greetingStep}`}
+                aria-live="polite"
+              >
+                <div
+                  className="greeting-progress"
+                  aria-label={`Greeting ${greetingStep} of 3`}
+                >
+                  {[1, 2, 3].map((step) => (
+                    <span
+                      key={step}
+                      className={greetingStep >= step ? 'complete' : ''}
+                    />
+                  ))}
                 </div>
+
+                <p className="greeting-message">
+                  {greetingStep === 0 && 'There is one last thing…'}
+                  {greetingStep === 1 && 'Hello!'}
+                  {greetingStep === 2 && 'It’s nice to meet you.'}
+                  {greetingStep === 3 && 'Have a lovely day!'}
+                </p>
+
+                <span className="greeting-subtext">
+                  {greetingStep === 0 &&
+                    'A little greeting, revealed one step at a time.'}
+                  {greetingStep === 1 && 'Thanks for stopping by.'}
+                  {greetingStep === 2 &&
+                    'I’m glad you made it this far.'}
+                  {greetingStep === 3 &&
+                    'Thank you for being part of this little experience.'}
+                </span>
+
+                {greetingStep < 3 ? (
+                  <button
+                    className="greeting-continue"
+                    onClick={advanceGreeting}
+                  >
+                    {greetingStep === 0
+                      ? 'Reveal my greeting'
+                      : 'Continue'}
+                    <span>↗</span>
+                  </button>
+                ) : (
+                  <button
+                    className="greeting-continue"
+                    onClick={() => setGreetingStep(0)}
+                  >
+                    Replay greeting <span>↻</span>
+                  </button>
+                )}
               </div>
 
               <button
                 className="gold-button"
                 onClick={() => goToPage(0)}
               >
-                Back to the beginning
-                <span>↗</span>
+                Back to the beginning <span>↗</span>
               </button>
             </div>
 
